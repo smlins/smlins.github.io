@@ -1,0 +1,213 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Interactive Crawler工具的使用 | Mlins' Blog</title><meta name="author" content="Mlins"><meta name="copyright" content="Mlins"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="​	交互式爬虫是我之前一直想要尝试去做的一个东西，但由于时间问题一直都没有做，最近正好有点时间，写了初版上传到了github上，项目地址：https:&#x2F;&#x2F;github.com&#x2F;smlins&#x2F;Interactive-Crawl, 感兴趣的师傅们可以用用，有其他问题或建议在github上或留言都行，我有时间就去完善。 ​	在我印象里，传统的爬虫就是简单的爬取页面上的超链接，但没有办法获取到页面触发事">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Interactive Crawler工具的使用">
+<meta property="og:url" content="http://example.com/2023/04/26/%E7%88%AC%E8%99%AB%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/index.html">
+<meta property="og:site_name" content="Mlins&#39; Blog">
+<meta property="og:description" content="​	交互式爬虫是我之前一直想要尝试去做的一个东西，但由于时间问题一直都没有做，最近正好有点时间，写了初版上传到了github上，项目地址：https:&#x2F;&#x2F;github.com&#x2F;smlins&#x2F;Interactive-Crawl, 感兴趣的师傅们可以用用，有其他问题或建议在github上或留言都行，我有时间就去完善。 ​	在我印象里，传统的爬虫就是简单的爬取页面上的超链接，但没有办法获取到页面触发事">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/img/20230404140956.png">
+<meta property="article:published_time" content="2023-04-26T12:17:00.000Z">
+<meta property="article:modified_time" content="2023-04-26T12:27:01.201Z">
+<meta property="article:author" content="Mlins">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/img/20230404140956.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/2023/04/26/%E7%88%AC%E8%99%AB%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  }
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Interactive Crawler工具的使用',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-04-26 20:27:01'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/20230404140956.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">1</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><hr/></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="Mlins' Blog"><span class="site-name">Mlins' Blog</span></a></span><div id="menus"><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">Interactive Crawler工具的使用</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-04-26T12:17:00.000Z" title="发表于 2023-04-26 20:17:00">2023-04-26</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-04-26T12:27:01.201Z" title="更新于 2023-04-26 20:27:01">2023-04-26</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="Interactive Crawler工具的使用"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><blockquote>
+<p>​	交互式爬虫是我之前一直想要尝试去做的一个东西，但由于时间问题一直都没有做，最近正好有点时间，写了初版上传到了github上，项目地址：<a target="_blank" rel="noopener" href="https://github.com/smlins/Interactive-Crawl">https://github.com/smlins/Interactive-Crawl</a>, 感兴趣的师傅们可以用用，有其他问题或建议在github上或留言都行，我有时间就去完善。</p>
+<p>​	在我印象里，传统的爬虫就是简单的爬取页面上的超链接，但没有办法获取到页面触发事件所产生的http请求和响应，随着科技的发展，其实这种动态爬虫技术早在几年前就已经存在了，只是我们一直没有关注而已，不管怎样先接触下皮毛，再去深入了解。</p>
+</blockquote>
+<h2 id="一、简介"><a href="#一、简介" class="headerlink" title="一、简介"></a>一、简介</h2><p>​	Interactive Crawler是一款交互式爬虫工具，不仅可以爬取页面中的超链接，还能获取通过页面的各种交互事件触发所发起的请求，支持代理设置，可结合其他漏洞扫描工具使用，目前支持以下事件的触发：</p>
+<ol>
+<li>Form表单的填写去自动提交；</li>
+<li>获取页面的onclick事件并触发该事件；</li>
+<li>触发a标签中JavaScript代码；</li>
+</ol>
+<p>当然还有以下事件的触发未实现：</p>
+<ol>
+<li><p>获取所有按钮并点击触发；</p>
+<blockquote>
+<p>如果按钮不是通过JavaScript代码中绑定事件的基本上也都能触发， 因为button不像submit标签一样，button需要<code>onclick</code>或其他事件来完成事件触发。</p>
+</blockquote>
+</li>
+<li><p>也可能还有类似于<code>onmousedown</code>、<code>onmouseup</code>等事件的获取和触发；</p>
+</li>
+<li><p>非form表单的输入框输入已经表单提交；</p>
+</li>
+<li><p>带有事件的隐藏标签触发；</p>
+</li>
+</ol>
+<p>还有很多，只能通过平时不断的实践来收集和完善功能。</p>
+<h2 id="二、安装"><a href="#二、安装" class="headerlink" title="二、安装"></a>二、安装</h2><p>从github上下载此项目：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone https://github.com/smlins/Interactive-Crawl.git</span><br></pre></td></tr></table></figure>
+
+<p>进入目录并安装运行该项目所需要的模块：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cd Interactive-Crawl &amp;&amp; pip install -r requirements.txt</span><br></pre></td></tr></table></figure>
+
+<p>最后就可以运行该项目</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python crawler.py http://example.com</span><br></pre></td></tr></table></figure>
+
+<p>可通过<code>python crawler.py -h</code>来查看一些可选参数</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">可选参数：</span><br><span class="line">  -h, --help             帮助显示此帮助消息并退出</span><br><span class="line">  -t , --timeout         所有页面请求的超时时间，默认为5秒</span><br><span class="line">  --cookie               设置http请求Cookie</span><br><span class="line">  --proxy-server         设置爬虫的代理地址，爬虫会将所有请求转发至该服务端口</span><br><span class="line">  --headless             浏览器的无头操作模式，添加此选项后不会显示浏览器界面</span><br><span class="line">  --exclude-links        如果链接包含此关键字，支持正则表达式</span><br><span class="line">  --crawl-link-type      爬网程序爬网的网络资源类型，默认爬取xhr、fetch、document</span><br><span class="line">  --prohibit-load-type   禁止加载的网络资源类型，默认禁止加载image,media,font,manifest，该配置选项是优先级最高的</span><br><span class="line">  --crawl-external-links 设置是否爬取外部链接爬网，默认情况下，仅对同一网站链接进行爬网（不推荐）</span><br><span class="line">  --intercept-request    开启http请求拦截，只有当该选项开启后，--prohibit-load-type参数才生效</span><br></pre></td></tr></table></figure>
+
+<h2 id="三、用法"><a href="#三、用法" class="headerlink" title="三、用法"></a>三、用法</h2><h3 id="1-基础用法"><a href="#1-基础用法" class="headerlink" title="1. 基础用法"></a>1. 基础用法</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">本次演示爬取本地搭建的dvwa页面，与<span class="built_in">logout</span>有关的链接和事件一律不触发（不退出登陆），另外带上Cookie</span></span><br><span class="line">python crawler.py http://192.168.88.150:8080 --exclude-links=&quot;logout&quot; --cookie=&quot;csrftoken=adr5Tc4LBxVQkwKngnCuZvP1iAO9YtT4GhwgqodBn7JzdFE5sxjcC6crZhwKcqCf; sessionid=0j0ko147842bpojsxcv4yu3038yr2gxo; PHPSESSID=vgcnl569r3rlncuvt0hb4gqe87; security=impossible&quot;</span><br></pre></td></tr></table></figure>
+
+<p><img src="1682490094394.jpg" alt="1682490094394"></p>
+<blockquote>
+<ul>
+<li>若无需显示浏览器界面，在后面加上<code>--headless</code>即可；</li>
+<li>若网页图片等媒体资源加载过慢时，可加上<code>--intercept-request</code>参数禁止其加载，从而加快页面加载；</li>
+</ul>
+</blockquote>
+<h3 id="2-结合xray进行漏洞扫描"><a href="#2-结合xray进行漏洞扫描" class="headerlink" title="2. 结合xray进行漏洞扫描"></a>2. 结合xray进行漏洞扫描</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">以被动扫描模式启动xray</span></span><br><span class="line">./xray webscan --listen 127.0.0.1:8080 --html-output test.html</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">以代理模式启动爬虫且无需启动浏览器界面</span></span><br><span class="line">python crawler.py http://192.168.88.150:8080 --exclude-links=&quot;logout&quot; --cookie=&quot;csrftoken=adr5Tc4LBxVQkwKngnCuZvP1iAO9YtT4GhwgqodBn7JzdFE5sxjcC6crZhwKcqCf; sessionid=0j0ko147842bpojsxcv4yu3038yr2gxo; PHPSESSID=vgcnl569r3rlncuvt0hb4gqe87; security=impossible&quot; --proxy-server=&quot;127.0.0.1:8080&quot; --headless</span><br></pre></td></tr></table></figure>
+
+<p><img src="1682491057682.jpg" alt="1682491057682"></p>
+<h2 id="四、问题总结"><a href="#四、问题总结" class="headerlink" title="四、问题总结"></a>四、问题总结</h2><p>&amp;emsp;&amp;emsp;该爬虫脚本主要是采用<code>Python</code>的<code>pyppeteer</code>模块编写，目前只支持单个网站的线性爬取，速度较慢，日后再寻思将优化方案。Python也有一些局限性，例如多线程只能并发无法做到并行，故<code>i/o</code>编程使用协程是最优方案，<code>pyppeteer</code>本身也存在一些问题尚未修复，自己还是得研究下<code>Chrome Devtools</code>协议的使用，指不定以后就用Golang语言来完成此脚本。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="http://example.com">Mlins</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2023/04/26/%E7%88%AC%E8%99%AB%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/">http://example.com/2023/04/26/%E7%88%AC%E8%99%AB%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://example.com" target="_blank">Mlins' Blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"><div class="social-share" data-image="/img/20230404140956.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/20230404140956.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Mlins</div><div class="author-info__description">这是一段描述</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">1</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E7%AE%80%E4%BB%8B"><span class="toc-number">1.</span> <span class="toc-text">一、简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E5%AE%89%E8%A3%85"><span class="toc-number">2.</span> <span class="toc-text">二、安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E7%94%A8%E6%B3%95"><span class="toc-number">3.</span> <span class="toc-text">三、用法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E5%9F%BA%E7%A1%80%E7%94%A8%E6%B3%95"><span class="toc-number">3.1.</span> <span class="toc-text">1. 基础用法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E7%BB%93%E5%90%88xray%E8%BF%9B%E8%A1%8C%E6%BC%8F%E6%B4%9E%E6%89%AB%E6%8F%8F"><span class="toc-number">3.2.</span> <span class="toc-text">2. 结合xray进行漏洞扫描</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93"><span class="toc-number">4.</span> <span class="toc-text">四、问题总结</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/04/26/%E7%88%AC%E8%99%AB%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/" title="Interactive Crawler工具的使用">Interactive Crawler工具的使用</a><time datetime="2023-04-26T12:17:00.000Z" title="发表于 2023-04-26 20:17:00">2023-04-26</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By Mlins</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
